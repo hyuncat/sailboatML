@@ -5,9 +5,14 @@ library(shapr)
 library(readxl)
 library(rvest)
 
-data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx')
-colnames(data) <- c('make', 'variant', 'length', 'big_region',
-                    'small_region', 'price', 'year')
+# Read in raw data
+monohull_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Monohulled Sailboats ')
+catamaran_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Catamarans')
+
+colnames(monohull_data) <- c('make', 'variant', 'length', 'big_region',
+                             'small_region', 'price', 'year')
+colnames(catamaran_data) <- c('make', 'variant', 'length', 'big_region',
+                              'small_region', 'price', 'year')
 
 # Data Cleaning
 # (1) Outlier handling
@@ -29,6 +34,7 @@ remove_outliers <- function(data) {
   return(data)
 }
 
-cleaned_data <- remove_outliers(data)
+cleaned_monohull_data <- remove_outliers(monohull_data)
+cleaned_catamaran_data <- remove_outliers(catamaran_data)
 
 
