@@ -61,15 +61,19 @@ remove_missing <- function(data) {
   print(paste("Removing", sum(is.na(data)), "missing values in data"))
   data <- na.omit(data)
 
+  # Ensure 'make' and 'variant' columns are character types
+  data$make <- as.character(data$make)
+  data$variant <- as.character(data$variant)
+
   # Get top 6 manufacturers
-  make_freqs <- sort(table(data$make))
-  top_make <- as.character(names(tail(make_freqs, 6)))
+  make_freqs <- sort(table(data$make), decreasing=TRUE)
+  top_make <- names(head(make_freqs, 6))
   print("Top 6 manufacturers:")
   print(top_make)
 
   # Get top 22 variants
-  variant_freqs <- sort(table(data$variant))
-  top_variant <- names(tail(variant_freqs, 22))
+  variant_freqs <- sort(table(data$variant), decreasing=TRUE)
+  top_variant <- names(head(variant_freqs, 22))
   print("Top 22 variants:")
   print(top_variant)
 
