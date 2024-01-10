@@ -1,14 +1,10 @@
 # Programming simulations here...
 library(tidyverse)
-library(lightgbm)
-library(shapr)
 library(readxl)
-library(rvest)
 
 # Read in raw data
 monohull_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Monohulled Sailboats ')
 catamaran_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Catamarans')
-
 
 # Clean up raw excel data
 clean_raw <- function(data) {
