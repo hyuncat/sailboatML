@@ -13,9 +13,9 @@ etaSquared(m.aov1)
 etaSquared(c.aov1)
 
 # Get two-way ANOVA table
-m.aov2 <- aov(price ~ small_region + variant, data = cleaned_monohull_data)
+m.aov2 <- aov(price ~ small_region * variant, data = cleaned_monohull_data)
 summary(m.aov2)
-c.aov2 <- aov(price ~ small_region + variant, data = cleaned_catamaran_data)
+c.aov2 <- aov(price ~ small_region * variant, data = cleaned_catamaran_data)
 summary(c.aov2)
 
 # Calculate eta squared 
