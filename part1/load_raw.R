@@ -1,4 +1,5 @@
-# Programming simulations here...
+# Functions to load and prepare raw data
+
 library(tidyverse)
 library(readxl)
 
@@ -92,7 +93,6 @@ cleaned_monohull_data <- monohull_data %>%
   clean_raw() %>%
   remove_outliers() %>%
   remove_missing()
-
 
 cleaned_catamaran_data <- catamaran_data %>%
   clean_raw() %>%

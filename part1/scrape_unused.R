@@ -1,3 +1,6 @@
+# If we had more time, we would scrape the remaining data this way...
+# (Functions not used in our analysis)
+
 library(tidyverse)
 library(rvest)
 
