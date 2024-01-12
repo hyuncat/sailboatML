@@ -13,9 +13,10 @@ clean_raw <- function(data) {
                       'small_region', 'price', 'year')
 
   # Trim white space on all values in data
-  data <- apply(data, 2, function(x) {
-    trimws(x, which=c('both'), whitespace="[ \t\r\n]")
-  })
+  data <- data.frame(apply(data, 2, function(x) {
+    trimws(x)
+    gsub("\u00A0", "", x)
+  }))
 
   # Round each cell in make and variant cols of dataframe if numeric
   for (i in 1:nrow(data)) {
@@ -81,14 +82,22 @@ remove_missing <- function(data) {
   return(data)
 }
 
+fix_white <- function(data) {
+  data$year <- gsub("^\\s+", "", data$year)
+  data$price <- gsub("^\\s+", "", data$price)
+  return(data)
+}
+
 cleaned_monohull_data <- monohull_data %>%
   clean_raw() %>%
   remove_outliers() %>%
   remove_missing()
+
 
 cleaned_catamaran_data <- catamaran_data %>%
   clean_raw() %>%
   remove_outliers() %>%
   remove_missing()
 
-
+mono_names <- unique(paste(cleaned_monohull_data$make, cleaned_monohull_data$variant))
+cat_names <- unique(paste(cleaned_catamaran_data$make, cleaned_catamaran_data$variant))

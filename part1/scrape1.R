@@ -39,6 +39,7 @@ scrape_page <- function(url) {
       current_row <- current_row + 1
     }
   }
+  names(df) <- c('name', 'length', 'beam', 'draft', 'year', 'type', 'hull', 'engine', 'location', 'price')
   return(df)
 }
 
@@ -49,9 +50,18 @@ generate_urls <- function(base_url, num_pages) {
 }
 
 base_url <- 'https://www.sailboatlistings.com/cgi-bin/saildata/db.cgi?db=default&uid=default&view_records=1&ID=*&sb=date&so=descend&nh='
-num_pages <- 5
 
-urls <- generate_urls(base_url, num_pages)
+urls <- generate_urls(base_url, 5)
 scraped_df <- do.call(rbind, lapply(urls, scrape_page))
+
+mono_rows <- grepl('monohull', scraped_df$hull)
+cat_rows <- grepl('catamaran', scraped_df$hull)
+
+scraped_mono <- scraped_df[mono_rows, ]
+scraped_mono <- scraped_mono[scraped_mono$name %in% mono_names, ]
+
+scraped_cat <- scraped_df[cat_rows, ]
+scraped_cat <- scraped_cat[scraped_cat$name %in% cat_names, ]
+
 
 
