@@ -3,10 +3,6 @@
 library(tidyverse)
 library(readxl)
 
-# Read in raw data
-monohull_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Monohulled Sailboats ')
-catamaran_data <- read_excel('./part1/2023_MCM_Problem_Y_Boats.xlsx', 'Catamarans')
-
 # Clean up raw excel data
 clean_raw <- function(data) {
   # Set colnames easier to read
@@ -54,51 +50,60 @@ remove_outliers <- function(data) {
 }
 # (2) Remove missing values
 # Also select top 6 manufacturers and top 22 variants by frequency
-remove_missing <- function(data) {
+remove_missing <- function(data, top=FALSE) {
   # Remove NA values
   print(paste("Removing", sum(is.na(data)), "missing values in data"))
   data <- na.omit(data)
 
-  # Ensure 'make' and 'variant' columns are character types
-  data$make <- as.character(data$make)
-  data$variant <- as.character(data$variant)
+  if (top==TRUE) {
+    # Ensure 'make' and 'variant' columns are character types
+    data$make <- as.character(data$make)
+    data$variant <- as.character(data$variant)
 
-  # Get top 6 manufacturers
-  make_freqs <- sort(table(data$make), decreasing=TRUE)
-  top_make <- names(head(make_freqs, 6))
-  print("Top 6 manufacturers:")
-  print(top_make)
+    # Get top 6 manufacturers
+    make_freqs <- sort(table(data$make), decreasing=TRUE)
+    top_make <- names(head(make_freqs, 6))
+    print("Top 6 manufacturers:")
+    print(top_make)
 
-  # Get top 22 variants
-  variant_freqs <- sort(table(data$variant), decreasing=TRUE)
-  top_variant <- names(head(variant_freqs, 22))
-  print("Top 22 variants:")
-  print(top_variant)
+    # Get top 22 variants
+    variant_freqs <- sort(table(data$variant), decreasing=TRUE)
+    top_variant <- names(head(variant_freqs, 22))
+    print("Top 22 variants:")
+    print(top_variant)
 
-  # Subset data by top make and variant
-  n <- nrow(data)
-  data <- data[data$make %in% top_make, ]
-  data <- data[data$variant %in% top_variant, ]
-  print(paste("Filtered", n-nrow(data), "non-NA rows from data"))
+    # Subset data by top make and variant
+    n <- nrow(data)
+    data <- data[data$make %in% top_make, ]
+    data <- data[data$variant %in% top_variant, ]
+    print(paste("Filtered", n-nrow(data), "non-NA rows from data"))
+  }
+
   return(data)
 }
 
-fix_white <- function(data) {
-  data$year <- gsub("^\\s+", "", data$year)
-  data$price <- gsub("^\\s+", "", data$price)
-  return(data)
+# Not used
+# fix_white <- function(data) {
+#   data$year <- gsub("^\\s+", "", data$year)
+#   data$price <- gsub("^\\s+", "", data$price)
+#   return(data)
+# }
+
+if (sys.nframe() == 0) {
+  # Read in raw data
+  monohull_data <- read_excel('./2023_MCM_Problem_Y_Boats.xlsx', 'Monohulled Sailboats ')
+  catamaran_data <- read_excel('./2023_MCM_Problem_Y_Boats.xlsx', 'Catamarans')
+
+  # Clean data
+  cleaned_monohull_data <- monohull_data %>%
+    clean_raw() %>%
+    remove_missing()
+
+  cleaned_catamaran_data <- catamaran_data %>%
+    clean_raw() %>%
+    remove_missing()
+
+  # mono_names <- unique(paste(cleaned_monohull_data$make, cleaned_monohull_data$variant))
+  # cat_names <- unique(paste(cleaned_catamaran_data$make, cleaned_catamaran_data$variant))
+
 }
-
-cleaned_monohull_data <- monohull_data %>%
-  clean_raw() %>%
-  remove_outliers() %>%
-  remove_missing()
-
-cleaned_catamaran_data <- catamaran_data %>%
-  clean_raw() %>%
-  remove_outliers() %>%
-  remove_missing()
-
-mono_names <- unique(paste(cleaned_monohull_data$make, cleaned_monohull_data$variant))
-cat_names <- unique(paste(cleaned_catamaran_data$make, cleaned_catamaran_data$variant))
-

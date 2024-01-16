@@ -6,9 +6,9 @@ get_GDP <- function(country, year) {
   # Convert country to iso2c
   cc <- countrycode(country, origin='country.name', destination='iso2c')
   #print(cc)
-  print(year)
+  #print(year)
   year <- as.numeric(year)
-  print(year)
+  #print(year)
 
   gdp_df <- tryCatch({
     suppressWarnings(WDI(indicator='NY.GDP.PCAP.KD', country=cc, start=year, end=year+1))
@@ -42,11 +42,13 @@ add_gdp_col <- function(df) {
   return(df)
 }
 
-gdp_cat_df <- add_gdp_col(cleaned_catamaran_data)
-gdp_mono_df <- add_gdp_col(cleaned_monohull_data)
+if (sys.nframe() == 0) {
+  gdp_cat_df <- add_gdp_col(cleaned_catamaran_data)
+  gdp_mono_df <- add_gdp_col(cleaned_monohull_data)
 
-gdp_cat_df <- na.omit(gdp_cat_df)
-gdp_mono_df <- na.omit(gdp_mono_df)
+  gdp_cat_df <- na.omit(gdp_cat_df)
+  gdp_mono_df <- na.omit(gdp_mono_df)
 
-write.csv(gdp_cat_df, './part1/data/clean_cat.csv', row.names=FALSE)
-write.csv(gdp_mono_df, './part1/data/clean_mono.csv', row.names=FALSE)
+  write.csv(gdp_cat_df, './part1/data/clean_cat.csv', row.names=FALSE)
+  write.csv(gdp_mono_df, './part1/data/clean_mono.csv', row.names=FALSE)
+}
