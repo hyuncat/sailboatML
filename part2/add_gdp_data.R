@@ -41,11 +41,22 @@ get_country_df <- function() {
   country_df <- data.frame(country=countries, code=country_codes)
 
   # Manually insert missing values
-  country_df["Netherlands Antilles", 2] <- "AN"
+  # country_df["Netherlands Antilles", 2] <- "AN"
+  # country_df["Cork", 2] <- "IE"
+  # country_df["West Indies", 2] <- "West Indies"
+  # country_df["Saint-Martin", 2] <- "MF"
+  # country_df["Lagos", 2] <- "NG"
+
+  country_df["Guadeloupe", 2] <- 'FR'
+  country_df["Netherlands Antilles", 2] <- 'NL'
   country_df["Cork", 2] <- "IE"
   country_df["West Indies", 2] <- "West Indies"
-  country_df["Saint-Martin", 2] <- "MF"
-  country_df["Lagos", 2] <- "NG"
+  country_df["Gibraltar", 2] <- 'GB'
+  country_df["British Virgin Islands", 2] <- 'GB'
+  country_df["U.S. Virgin Islands", 2] <- 'US'
+  country_df["Jersey", 2] <- 'GB'
+  country_df["Martinique", 2] <- 'FR'
+  country_df["Saint-Martin", 2] <- 'FR'
 
   gdp_vec <- c()
   for (i in 1:nrow(country_df)) {
@@ -112,6 +123,7 @@ add_gdp_col_new <- function(df) {
   return(df)
 }
 
+# Don't run if sourcing functions into other file
 if (sys.nframe() == 0) {
   load_data()
   country_df <- get_country_df()

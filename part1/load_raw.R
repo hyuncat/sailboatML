@@ -36,6 +36,7 @@ clean_raw <- function(data) {
 # Data Cleaning
 # (1) Outlier handling
 remove_outliers <- function(data) {
+  data <- as.data.frame(data)
   n <- nrow(data)
   # Get z_scores for price
   data$price <- as.numeric(data$price)
