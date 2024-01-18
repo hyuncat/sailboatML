@@ -4,6 +4,7 @@ library(tidyverse)
 library(ggplot2)
 library(scales)
 
+country_df <- read.csv('./part2/data/country_df.csv')
 mono_data <- read.csv('./part2/data/mono_data.csv')
 cat_data <- read.csv('./part2/data/cat_data.csv')
 
