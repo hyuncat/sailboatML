@@ -9,19 +9,21 @@ library(rvest)
 scrape_page <- function(url) {
   # Read in html of webpage
   url <- 'https://www.yachtworld.com/boats-for-sale/country-hong-kong/'
-  get_resp <- GET(url, user_agent = 'Columbia MCM competition research (email: ssh2198@columbia.edu)')
-  webpage <- read_html(get_resp)
 
-  webpage <- read_html('https://www.yachtworld.com/boats-for-sale/country-hong-kong/page-1/', silent=true)
+  webpage <- read_html('https://theboater.hk/sail/')
+
+
   # Get specific html elements
   sail_names <- webpage %>%
-    html_nodes("h2.style-module_listingTitle__iAd3j") %>%
+    html_nodes("h4") %>%
     html_text2()
-  sail_meta <- webpage %>%
-    html_nodes("span.sailvk") %>%
+
+  sail_price <- webpage %>%
+    html_nodes("div.price") %>%
     html_text2()
-  sail_headers <- webpage %>%
-    html_nodes("span.sailvb") %>%
+
+  sail_details <- webpage %>%
+    html_nodes("div.details") %>%
     html_text2()
 
   # Extract unique headers
