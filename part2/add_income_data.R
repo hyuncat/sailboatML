@@ -6,16 +6,32 @@ library(dplyr)
 # Add disposable income data to country_df
 add_income_to_country_df <- function(country_df) {
   income_data <- read_csv('./part2/data/income_per_capita.csv')
-  income_data <- income_data %>% rename(country = `Country Name`)
-  income_vec <- c()
 
+  # Rename cols
+  income_data <- income_data %>% rename(country = `Country Name`)
+  income_data <- income_data %>% rename(country_code = `Country Code`)
+
+  # Add 2 letter country code
+  country_codes <- sapply(income_data$country, function(x) countrycode(x, origin='country.name', destination='iso2c'))
+  income_data$country_code <- country_codes
+
+  income_vec <- c()
   for (i in 1:nrow(country_df)) {
-    cn <- country_df$country[i]
-    if (cn %in% income_data$country) {
-      income <- income_data[income_data$country==cn, '2021']
-    } else {
-      income <- NA
+
+    income <- NA
+    cc <- country_df$code[i]
+
+    if (cc %in% income_data$country_code) {
+      income_row <- as.data.frame(income_data[income_data$country_code %in% cc, ])
+      for (j in ncol(income_row):5) {
+        if (!is.na(income_row[1, j])) {
+          income <- income_row[1, j]
+          print(paste(cc, income))
+          break
+        }
+      }
     }
+
     income_vec <- c(income_vec, income)
   }
   income_vec <- unlist(income_vec)
