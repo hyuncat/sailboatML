@@ -55,11 +55,13 @@ if (sys.nframe() == 0) {
   mono_gdp_df <- add_hdi_col_new(mono_gdp_df)
   cat_gdp_df <- add_hdi_col_new(cat_gdp_df)
 
-  mono_gdp_df <- apply(mono_gdp_df,2,as.character)
-  cat_gdp_df <- apply(cat_gdp_df,2,as.character)
+  mono_gdp_df <- apply(mono_gdp_df, 2, as.character)
+  cat_gdp_df <- apply(cat_gdp_df, 2, as.character)
+  country_df <- apply(country_df, 2, as.character)
 
   # Save as files
   write.csv(mono_gdp_df, './part2/data/mono_data.csv', row.names=FALSE)
   write.csv(cat_gdp_df, './part2/data/cat_data.csv', row.names=FALSE)
+  write.csv(country_df, './part2/data/country_df.csv', row.names=FALSE)
 }
 

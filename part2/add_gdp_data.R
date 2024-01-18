@@ -61,7 +61,7 @@ get_country_df <- function() {
   gdp_vec <- c()
   for (i in 1:nrow(country_df)) {
     if (country_df$code[i] == "West Indies") {
-      gdp <- 12057.57
+      gdp <- 12057.57 # From get_WestIndies_gdp()
     } else {
       gdp <- get_GDP_by_code(country_df$code[i])
     }
@@ -84,6 +84,7 @@ get_country_df <- function() {
 }
 
 
+# Returned 12057.57
 get_WestIndies_gdp <- function() {
   west_indies_country_codes <- c("AG", "BS", "BB", "CU", "DM", "DO", "GD", "HT",
                                  "JM", "KN", "LC", "VC", "TT")
