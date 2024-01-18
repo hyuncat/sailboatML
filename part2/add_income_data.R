@@ -5,7 +5,6 @@ library(dplyr)
 
 # Add disposable income data to country_df
 add_income_to_country_df <- function(country_df) {
-  country_df <- read_csv('./part2/data/country_df.csv')
   income_data <- read_csv('./part2/data/income_per_capita.csv')
   income_data <- income_data %>% rename(country = `Country Name`)
   income_vec <- c()
@@ -13,12 +12,13 @@ add_income_to_country_df <- function(country_df) {
   for (i in 1:nrow(country_df)) {
     cn <- country_df$country[i]
     if (cn %in% income_data$country) {
-      income <- income_data[income_data$country==cn, '2022']
+      income <- income_data[income_data$country==cn, '2021']
     } else {
       income <- NA
     }
     income_vec <- c(income_vec, income)
   }
+  income_vec <- unlist(income_vec)
   country_df$income <- income_vec
 }
 
@@ -41,9 +41,11 @@ add_income_col_new <- function(df) {
 # Don't run if sourcing functions into other file
 if (sys.nframe() == 0) {
   country_df <- read_csv('./part2/data/country_df.csv')
-  country_df <- add_income_to_country_df('country_df')
+  country_df <- add_income_to_country_df(country_df)
+
   mono_gdp_df <- read_csv('./part2/data/mono_data.csv')
   cat_gdp_df <- read_csv('./part2/data/cat_data.csv')
+
   mono_gdp_df <- add_income_col_new(mono_gdp_df)
   cat_gdp_df <- add_income_col_new(cat_gdp_df)
 

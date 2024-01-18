@@ -1,5 +1,4 @@
-# If we had more time, we would scrape the remaining data this way...
-# (Functions not used in our analysis)
+# Functions to scrape Hong Kong sailboat data
 
 library(tidyverse)
 library(httr)
@@ -55,34 +54,16 @@ scrape_rightboat <- function() {
   big_df$price[big_df$price == 0] <- NA
   big_df <- na.omit(big_df)
 
-  write.csv(big_df, './part2/data/hk_data.csv')
+  write.csv(big_df, './part2/data/hk_data.csv', row.names=FALSE)
 
   return(big_df)
 }
 
-scrape_theboater <- function() {
-  vc_gitem-zone-mini
-}
+hk_data <- read.csv('./part2/data/hk_data.csv')
+mono_data <- read.csv('./part2/data/mono_data.csv')
+cat_data <- read.csv('./part2/data/cat_data.csv')
 
-# Function to generate URLs for multiple pages
-generate_urls <- function(base_url, num_pages) {
-  urls <- paste0(base_url, seq(1, num_pages))
-  return(urls)
-}
-
-base_url <- 'https://www.sailboatlistings.com/cgi-bin/saildata/db.cgi?db=default&uid=default&view_records=1&ID=*&sb=date&so=descend&nh='
-
-urls <- generate_urls(base_url, 5)
-scraped_df <- do.call(rbind, lapply(urls, scrape_page))
-
-mono_rows <- grepl('monohull', scraped_df$hull)
-cat_rows <- grepl('catamaran', scraped_df$hull)
-
-scraped_mono <- scraped_df[mono_rows, ]
-scraped_mono <- scraped_mono[scraped_mono$name %in% mono_names, ]
-
-scraped_cat <- scraped_df[cat_rows, ]
-scraped_cat <- scraped_cat[scraped_cat$name %in% cat_names, ]
-
-
+hk_data$mono <- sapply(hk_data$name, function(x) any(str_detect(mono_data$make, paste0("\\b", unlist(str_extract_all(x, "\\w+"))[[1]], "\\b"))))
+hk_data$cat <- sapply(hk_data$name, function(x) any(str_detect(cat_data$make, paste0("\\b", unlist(str_extract_all(x, "\\w+"))[[1]], "\\b"))))
+write.csv(hk_data, './part2/data/hk_data.csv', row.names=FALSE)
 
